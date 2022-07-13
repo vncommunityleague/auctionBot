@@ -3,7 +3,7 @@ const { MIN_INCREMENT, INITIAL_TIMER, IDLE_TIMER, MAX_BID } = require('../module
 const MAX_MEMBERS = 4;
 
 function checkBid(bidValue, bidInteraction, balance, teamMembers, saleValue) {
-    if (teamMembers.length == MAX_MEMBERS) { 
+    if (teamMembers.length === MAX_MEMBERS) {
         bidInteraction.reply({ 
             content: `Bạn đã vượt quá giới hạn số người chơi cho phép là ${teamMembers.length}!`, 
             ephemeral: true, 
@@ -13,7 +13,7 @@ function checkBid(bidValue, bidInteraction, balance, teamMembers, saleValue) {
 
     if (bidValue > MAX_BID) {
         bidInteraction.reply({
-            content: `Bạn chỉ được bid tối đa ${MAX_BID}! Đặt bid ${MAX_BID} để đưa thành viên về đội ngay lập tức!`,
+            content: `Bạn chỉ được bid tối đa ${MAX_BID}! Đặt bid ${MAX_BID} để đưa thành viên về đội ngay!`,
             ephemeral: true,
         });
         return false;
@@ -37,7 +37,7 @@ function checkBid(bidValue, bidInteraction, balance, teamMembers, saleValue) {
 
     if (bidValue < saleValue + MIN_INCREMENT) {
         bidInteraction.reply({
-            content: `You have to bid at least ${saleValue + MIN_INCREMENT} or higher!`,
+            content: `Bạn phải bid ít nhất ${saleValue + MIN_INCREMENT} hoặc cao hơn!`,
             ephemeral: true,
         });
         return false;
@@ -45,7 +45,7 @@ function checkBid(bidValue, bidInteraction, balance, teamMembers, saleValue) {
 
     if (bidValue % MIN_INCREMENT !== 0) {
         bidInteraction.reply({
-            content: `The bid was not an increment of ${MIN_INCREMENT}!`,
+            content: `Bạn cần bid cao hơn ${MIN_INCREMENT} để hợp lệ!`,
             ephemeral: true,
         });
         return false;
@@ -83,7 +83,7 @@ function initCollector(interaction, db, player) {
 
         saleValue = bidValue;
         lastBidder = bidInteraction.user.id;
-        bidInteraction.reply(`${bidInteraction.member.displayName} bids ${bidValue}.`);
+        bidInteraction.reply(`${bidInteraction.member.displayName} đã bid ${bidValue}.`);
 
         if (bidValue === MAX_BID) collector.stop();
         collector.resetTimer({ time: IDLE_TIMER });
@@ -91,7 +91,7 @@ function initCollector(interaction, db, player) {
 
     collector.on("end", async () => {
         if (lastBidder == null) {
-            await interaction.followUp("No one has bid on the player.");
+            await interaction.followUp("Chưa có ai bid vào player này.");
             await db.run(`
                 UPDATE bids
                 SET ongoing = FALSE
@@ -99,7 +99,7 @@ function initCollector(interaction, db, player) {
             `)
         } else {
             const bidderName = interaction.guild.members.cache.get(lastBidder).displayName;
-            await interaction.followUp(`${player.username} has been sold to ${bidderName} for ${saleValue}`);
+            await interaction.followUp(`${player.username} đã về đội của ${bidderName} với giá ${saleValue}`);
             await db.run(`
                 UPDATE bids
                 SET sale_value   = ${saleValue},
@@ -118,7 +118,7 @@ function initCollector(interaction, db, player) {
 
 function generatePlayerCard(player) {
     return {
-        "content": "Bidding has started! Use `/bid <amount>` to start placing a bid.",
+        "content": "Flash sale dã bắt đầu! Dùng lệnh `/bid <số tiền>` để dấu giá.",
         "embeds": [
             {
                 "color": 5814783,
@@ -140,7 +140,7 @@ function generatePlayerCard(player) {
                     "icon_url": `https://a.ppy.sh/${player.user_id}?.png`,
                 },
                 "footer": {
-                    "text": "Rank is from end of signups",
+                    "text": "Rank hiển thị theo lúc đăng ký giải",
                 },
             },
         ],
@@ -150,7 +150,7 @@ function generatePlayerCard(player) {
 module.exports = {
     data: {
         name: "newsale",
-        description: "Create a new sale",
+        description: "Tạo Flash Sale mới",
     },
     handler: async (interaction, db) => {
         const ongoing = await db.get(`
@@ -160,7 +160,7 @@ module.exports = {
         );
 
         if (ongoing) {
-            interaction.reply("There is already a sale ongoing!")
+            interaction.reply("Hiện đang có Flash Sale hoạt động!")
             return;
         }
 
@@ -174,7 +174,7 @@ module.exports = {
         );
 
         if (!player) {
-            interaction.reply("No more players to auction!");
+            interaction.reply("Không còn ai để đấu giá!");
             return;
         }
 

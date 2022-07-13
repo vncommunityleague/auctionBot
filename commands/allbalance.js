@@ -3,7 +3,7 @@ const { ADMIN_ROLE_ID } = require('../modules/config');
 module.exports = {
     data: {
         name: "allbalance",
-        description: "Check every bidders balance",
+        description: "Kiểm tra số dư của các bidders",
     },
     handler: async (interaction, db) => {
         const rows = await db.all(`
@@ -11,7 +11,7 @@ module.exports = {
             FROM bidders`,
         );
 
-        if (!rows.length) interaction.reply({ content: "No bidder has currency!", ephemeral: true });
+        if (!rows.length) interaction.reply({ content: "Không một ai có tiền cả!", ephemeral: true });
         else {
             const output = [];
             await interaction.guild.members.fetch();

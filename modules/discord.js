@@ -42,13 +42,13 @@ async function run(db) {
             console.error(e);
             try {
                 await interaction.reply({
-                    content: `Something went wrong while executing this command!\n\`${e}\``,
+                    content: `Có lỗi xảy ra!\n\`${e}\``,
                     ephemeral: true,
                 });
             } catch (e) {
                 // interaction has already been replied to
                 await interaction.followUp({
-                    content: `Something went wrong while executing this command!\n\`${e}\``,
+                    content: `Có lỗi xảy ra!\n\`${e}\``,
                     ephemeral: true,
                 });
             }

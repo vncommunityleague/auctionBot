@@ -3,11 +3,11 @@ const { BIDDER_ROLE_ID } = require('../modules/config');
 module.exports = {
     data: {
         name: "bid",
-        description: "Bid on the currently auctioned player!",
+        description: "Đấu giá người chơi đang được sale!",
         options: [{
             name: "amount",
             type: "INTEGER",
-            description: "Amount of currency to bid",
+            description: "Số điểm dùng để cược",
             required: true,
         }],
     },

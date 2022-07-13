@@ -14,9 +14,9 @@ async function initPlayersTable(db) {
         ) WITHOUT ROWID
     `);
 
-    console.log("Created players table");
+    console.log("Đã tạo table players");
 
-    console.log("Importing players from players.tsv");
+    console.log("Đang nhập file từ players.tsv one momento pls");
 
     const promisesArray = [];
 
@@ -33,7 +33,7 @@ async function initPlayersTable(db) {
         });
 
     await Promise.all(promisesArray);
-    console.log("Finished importing players from players.tsv")
+    console.log("Done!")
 }
 
 function initBiddersTable(db) {
@@ -79,7 +79,7 @@ async function init(db) {
 
 async function connect() {
     let db = await open({ filename: "./database.db", driver: sqlite3.Database });
-    console.log("Connected to database");
+    console.log("Đã kết nối đến database");
     await init(db);
     return db;
 }

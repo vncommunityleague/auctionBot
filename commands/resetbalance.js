@@ -3,11 +3,11 @@ const { ADMIN_ROLE_ID, BIDDER_ROLE_ID } = require('../modules/config');
 module.exports = {
     data: {
         name: "resetbalance",
-        description: "Sets all bidders balance",
+        description: "Reset toàn bộ số dư cả server",
         options: [{
             name: "amount",
             type: "INTEGER",
-            description: "The amount of currency to set to",
+            description: "Số tiền mặc định khi reset",
             required: true,
         }],
     },
@@ -21,6 +21,6 @@ module.exports = {
         db.run(`INSERT INTO bidders (discord_id, balance)
                 VALUES ${bidders.map(id => `(${id}, ${amount})`).join(",")}`)
 
-        interaction.reply(`Set all bidders balance to \`${amount}\` (${bidders.length} bidders)`);
+        interaction.reply(`Đã reset số dư của ${bidders.length} bidders về \`${amount}\` `);
     }
 }

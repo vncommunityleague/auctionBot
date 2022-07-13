@@ -3,7 +3,7 @@ const { BIDDER_ROLE_ID } = require('../modules/config');
 module.exports = {
     data: {
         name: "team",
-        description: "View your team",
+        description: "Hiển thị team của bạn",
     },
     handler: async (interaction, db) => {
         const rows = await db.all(`
@@ -15,7 +15,7 @@ module.exports = {
         );
 
         if (!rows.length) {
-            interaction.reply({ content: "You have not bought any players so far!", ephemeral: true });
+            interaction.reply({ content: "Bạn chưa săn ai về đội cả!", ephemeral: true });
             return;
         }
 

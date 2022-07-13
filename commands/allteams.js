@@ -3,7 +3,7 @@ const { ADMIN_ROLE_ID } = require('../modules/config');
 module.exports = {
     data: {
         name: "allteams",
-        description: "Check every bidders team",
+        description: "Kiểm tra lineup của bidder",
     },
     handler: async (interaction, db) => {
         const rows = await db.all(`
@@ -11,7 +11,7 @@ module.exports = {
             FROM bidders`,
         );
 
-        if (!rows.length) interaction.reply({ content: "No bidder exists!", ephemeral: true });
+        if (!rows.length) interaction.reply({ content: "Không có bidder nào tồn tại!", ephemeral: true });
         else {
             const output = [];
             await interaction.guild.members.fetch();
