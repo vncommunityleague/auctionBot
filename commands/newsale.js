@@ -1,10 +1,19 @@
 const Discord = require("discord.js")
 const { MIN_INCREMENT, INITIAL_TIMER, IDLE_TIMER, MAX_BID } = require('../modules/config');
+const MAX_MEMBERS = 4;
 
 function checkBid(bidValue, bidInteraction, balance, teamMembers, saleValue) {
+    if (teamMembers.length == MAX_MEMBERS) { 
+        bidInteraction.reply({ 
+            content: `Bạn đã vượt quá giới hạn số người chơi cho phép là ${teamMembers.length}!`, 
+            ephemeral: true, 
+        }); 
+        return false; 
+    }
+
     if (bidValue > MAX_BID) {
         bidInteraction.reply({
-            content: `You're only allowed to bid up to a maximum of ${MAX_BID} in an auction! Bid ${MAX_BID} exactly in case you want to buy the player instantly.`,
+            content: `Bạn chỉ được bid tối đa ${MAX_BID}! Đặt bid ${MAX_BID} để đưa thành viên về đội ngay lập tức!`,
             ephemeral: true,
         });
         return false;
@@ -12,15 +21,15 @@ function checkBid(bidValue, bidInteraction, balance, teamMembers, saleValue) {
 
     if (bidValue > balance) {
         bidInteraction.reply({
-            content: `You cannot bid more money than you currently possess! (${balance})`,
+            content: `Bạn không thể bid nhiều hơn số tiền đang có! (${balance})`,
             ephemeral: true,
         });
         return false;
     }
 
-    if (teamMembers.length < 3 && bidValue > balance * 0.75) {
+    if (teamMembers.length < 2 && bidValue > balance * 0.75) {
         bidInteraction.reply({
-            content: `You cannot bid more than 75% of your remaining money (${balance * 0.75}) until you have at least 3 players!`,
+            content: `Bạn không thể bid nhiều hơn 75% số tiền còn lại (${balance * 0.75}) trước khi đội có ít nhất 2 thành viên!`,
             ephemeral: true,
         });
         return false;
